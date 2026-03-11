@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Alumni Form</title>
+    <style>
+        body { font-family: Arial; padding: 50px; background: #f5f5f5; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        button { background: #667eea; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Alumni Form</h1>
+        <form action="/alumni/create-post" method="POST">
+            <div>
+                <label>Title:</label>
+                <input type="text" name="title" value="Test Post" required>
+            </div>
+            <div>
+                <label>Content:</label>
+                <textarea name="content" required>This is a test post content.</textarea>
+            </div>
+            <div>
+                <label>Type:</label>
+                <input type="text" name="type" value="general">
+            </div>
+            <button type="submit">Submit Test Post</button>
+        </form>
+        <p><a href="/home">Back to Home</a></p>
+    </div>
+</body>
+</html>

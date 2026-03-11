@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Post - Campus Connect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            color: #333;
+            font-size: 32px;
+        }
+        
+        .welcome-badge {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .create-post-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        
+        .post-type-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .type-option {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .type-option:hover {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .type-option.active {
+            background: white;
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .type-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .type-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .type-desc {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .file-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+        
+        .file-upload:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+        
+        .file-upload i {
+            font-size: 40px;
+            color: #667eea;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .file-upload p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .file-upload small {
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        .preview-container {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        .preview-container.show {
+            display: block;
+        }
+        
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .preview-title {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .remove-preview {
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+        }
+        
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+        }
+        
+        .tag {
+            background: #e8f0fe;
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .tag-input-field {
+            flex: 1;
+            border: none;
+            padding: 8px;
+            min-width: 120px;
+        }
+        
+        .tag-input-field:focus {
+            outline: none;
+        }
+        
+        .visibility-options {
+            display: flex;
+            gap: 20px;
+            padding: 10px 0;
+        }
+        
+        .visibility-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .visibility-option input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+        
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .draft-saved {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .draft-saved.show {
+            display: block;
+        }
+        
+        .character-count {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .character-count.warning {
+            color: #ffc107;
+        }
+        
+        .character-count.danger {
+            color: #dc3545;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Preview Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            color: #333;
+            font-size: 20px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .preview-post {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .preview-post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .preview-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .preview-author-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .preview-author-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .preview-post-type {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #e8f0fe;
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .preview-post-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .preview-post-content {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .preview-post-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .preview-post-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .preview-tag {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .preview-post-footer {
+            display: flex;
+            gap: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Campus Connect</div>
+        <div class="nav-links">
+            <a href="/home">Home</a>
+            <a href="/alumni/my-posts">My Posts</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="page-header">
+            <h1>Create Post</h1>
+            <div class="welcome-badge">
+                Welcome, <%= user.name %> (Alumni)
+            </div>
+        </div>
+        
+        <!-- Draft Saved Notification -->
+        <div class="draft-saved" id="draftSaved">
+            ✅ Draft saved successfully!
+        </div>
+        
+        <div class="create-post-card">
+            <!-- Post Type Selector -->
+            <div class="post-type-selector">
+                <div class="type-option active" onclick="selectPostType('job')" id="type-job">
+                    <div class="type-icon">💼</div>
+                    <div class="type-name">Job Opportunity</div>
+                    <div class="type-desc">Share job openings</div>
+                </div>
+                <div class="type-option" onclick="selectPostType('motivation')" id="type-motivation">
+                    <div class="type-icon">🚀</div>
+                    <div class="type-name">Motivation</div>
+                    <div class="type-desc">Inspire juniors</div>
+                </div>
+                <div class="type-option" onclick="selectPostType('resource')" id="type-resource">
+                    <div class="type-icon">📚</div>
+                    <div class="type-name">Resources</div>
+                    <div class="type-desc">Share study materials</div>
+                </div>
+                <div class="type-option" onclick="selectPostType('event')" id="type-event">
+                    <div class="type-icon">🎉</div>
+                    <div class="type-name">Event</div>
+                    <div class="type-desc">Announce events</div>
+                </div>
+                <div class="type-option" onclick="selectPostType('general')" id="type-general">
+                    <div class="type-icon">💬</div>
+                    <div class="type-name">General</div>
+                    <div class="type-desc">Any other update</div>
+                </div>
+            </div>
+            
+            <form action="/alumni/create-post" method="POST" enctype="application/x-www-form-urlencoded" id="postForm">
+                <!-- Hidden field for post type -->
+                <input type="hidden" name="type" id="postType" value="job">
+                
+                <!-- Title -->
+                <div class="form-group">
+                    <label>Post Title</label>
+                    <input type="text" name="title" id="postTitle" placeholder="Enter an engaging title..." required maxlength="100" onkeyup="updateCharCount('title', 100)">
+                    <div class="character-count" id="titleCount">0/100</div>
+                </div>
+                
+                <!-- Content -->
+                <div class="form-group">
+                    <label>Content</label>
+                    <textarea name="content" id="postContent" placeholder="Write your post here... Share your experience, opportunity, or message..." required maxlength="2000" onkeyup="updateCharCount('content', 2000)"></textarea>
+                    <div class="character-count" id="contentCount">0/2000</div>
+                </div>
+                
+                <!-- Image Upload -->
+                <div class="form-group">
+                    <label>Add Image (Optional)</label>
+                    <div class="file-upload" onclick="document.getElementById('imageInput').click()">
+                        <i>📷</i>
+                        <p>Click to upload an image</p>
+                        <small>PNG, JPG, GIF up to 10MB</small>
+                        <input type="file" id="imageInput" name="image" accept="image/*" onchange="previewImage(this)">
+                    </div>
+                    
+                    <!-- Image Preview -->
+                    <div class="preview-container" id="imagePreview">
+                        <div class="preview-header">
+                            <span class="preview-title">Image Preview</span>
+                            <span class="remove-preview" onclick="removeImage()">Remove</span>
+                        </div>
+                        <img class="preview-image" id="previewImg" src="#" alt="Preview">
+                    </div>
+                </div>
+                
+                <!-- Tags -->
+                <div class="form-group">
+                    <label>Tags (Press Enter or Comma to add)</label>
+                    <div class="tags-input" id="tagsContainer">
+                        <div class="tag" id="sampleTag1" style="display: none;">sample<span class="tag-remove" onclick="removeTag(this)">×</span></div>
+                        <input type="text" class="tag-input-field" id="tagInput" placeholder="e.g., internship, engineering, fresher" onkeydown="handleTagInput(event)">
+                    </div>
+                    <input type="hidden" name="tags" id="tagsHidden" value="">
+                </div>
+                
+                <!-- Job Specific Fields (shown only for job type) -->
+                <div id="jobFields">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" name="company" id="companyName" placeholder="e.g., Google, Microsoft">
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" name="location" id="jobLocation" placeholder="e.g., Bangalore, Remote">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Job Type</label>
+                            <select name="jobType" id="jobType">
+                                <option value="fulltime">Full Time</option>
+                                <option value="internship">Internship</option>
+                                <option value="contract">Contract</option>
+                                <option value="remote">Remote</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Experience Required</label>
+                            <input type="text" name="experience" id="experience" placeholder="e.g., 0-2 years">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Application Link / Email</label>
+                        <input type="text" name="applyLink" id="applyLink" placeholder="URL or email to apply">
+                    </div>
+                </div>
+                
+                <!-- Event Specific Fields (shown only for event type) -->
+                <div id="eventFields" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Event Date</label>
+                            <input type="date" name="eventDate" id="eventDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Event Time</label>
+                            <input type="text" name="eventTime" id="eventTime" placeholder="e.g., 6:00 PM">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Venue</label>
+                            <input type="text" name="venue" id="venue" placeholder="e.g., Online / Auditorium">
+                        </div>
+                        <div class="form-group">
+                            <label>Registration Link</label>
+                            <input type="text" name="regLink" id="regLink" placeholder="URL for registration">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Visibility Options -->
+                <div class="form-group">
+                    <label>Visibility</label>
+                    <div class="visibility-options">
+                        <label class="visibility-option">
+                            <input type="radio" name="visibility" value="public" checked> 🌍 Public (Everyone)
+                        </label>
+                        <label class="visibility-option">
+                            <input type="radio" name="visibility" value="students"> 🎓 Students Only
+                        </label>
+                        <label class="visibility-option">
+                            <input type="radio" name="visibility" value="alumni"> 👥 Alumni Only
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-outline" onclick="saveDraft()">Save Draft</button>
+                    <button type="button" class="btn btn-secondary" onclick="previewPost()">Preview</button>
+                    <button type="submit" class="btn btn-primary">Publish Post</button>
+                </div>
+            </form>
+        </div>
+        
+        <a href="/home" class="back-link">← Back to Dashboard</a>
+    </div>
+    
+    <!-- Preview Modal -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Preview Post</h2>
+                <button class="close-btn" onclick="closePreview()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="preview-post">
+                    <div class="preview-post-header">
+                        <div class="preview-avatar"><%= user.name.charAt(0) %></div>
+                        <div class="preview-author-info">
+                            <h4><%= user.name %></h4>
+                            <p>Alumni • <span id="previewTime">Just now</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-post-type" id="previewType">💼 Job Opportunity</div>
+                    <h2 class="preview-post-title" id="previewTitle">Senior Software Engineer at Google</h2>
+                    <div class="preview-post-content" id="previewContent">
+                        We're hiring! Looking for experienced software engineers...
+                    </div>
+                    
+                    <div id="previewImageContainer" style="display: none;">
+                        <img class="preview-post-image" id="previewImage" src="#" alt="Post image">
+                    </div>
+                    
+                    <div class="preview-post-tags" id="previewTags">
+                        <span class="preview-tag">engineering</span>
+                        <span class="preview-tag">google</span>
+                        <span class="preview-tag">jobs</span>
+                    </div>
+                    
+                    <div id="previewJobDetails" class="preview-job-details" style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                        <p><strong>🏢 Company:</strong> <span id="previewCompany">Google</span></p>
+                        <p><strong>📍 Location:</strong> <span id="previewJobLocation">Bangalore</span></p>
+                        <p><strong>💼 Type:</strong> <span id="previewJobType">Full Time</span></p>
+                        <p><strong>📅 Experience:</strong> <span id="previewExperience">2-5 years</span></p>
+                    </div>
+                    
+                    <div id="previewEventDetails" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                        <p><strong>📅 Date:</strong> <span id="previewEventDate">March 25, 2026</span></p>
+                        <p><strong>⏰ Time:</strong> <span id="previewEventTime">6:00 PM</span></p>
+                        <p><strong>📍 Venue:</strong> <span id="previewVenue">Online</span></p>
+                    </div>
+                    
+                    <div class="preview-post-footer">
+                        <span>❤️ 0 likes</span>
+                        <span>💬 0 comments</span>
+                        <span>🔄 0 shares</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closePreview()">Edit</button>
+                <button class="btn btn-primary" onclick="document.getElementById('postForm').submit()">Publish</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentTags = [];
+        let autoSaveTimer;
+        
+        // Select post type
+        function selectPostType(type) {
+            // Update active class
+            document.querySelectorAll('.type-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            document.getElementById(`type-${type}`).classList.add('active');
+            
+            // Update hidden input
+            document.getElementById('postType').value = type;
+            
+            // Show/hide relevant fields
+            const jobFields = document.getElementById('jobFields');
+            const eventFields = document.getElementById('eventFields');
+            
+            if(type === 'job') {
+                jobFields.style.display = 'block';
+                eventFields.style.display = 'none';
+            } else if(type === 'event') {
+                jobFields.style.display = 'none';
+                eventFields.style.display = 'block';
+            } else {
+                jobFields.style.display = 'none';
+                eventFields.style.display = 'none';
+            }
+            
+            // Update preview type
+            const typeNames = {
+                'job': '💼 Job Opportunity',
+                'motivation': '🚀 Motivation',
+                'resource': '📚 Resource',
+                'event': '🎉 Event',
+                'general': '💬 General'
+            };
+            document.getElementById('previewType').textContent = typeNames[type];
+        }
+        
+        // Character count
+        function updateCharCount(field, max) {
+            const input = document.getElementById(`post${field.charAt(0).toUpperCase() + field.slice(1)}`);
+            const count = input.value.length;
+            const countElement = document.getElementById(`${field}Count`);
+            
+            countElement.textContent = `${count}/${max}`;
+            
+            if(count > max * 0.9) {
+                countElement.classList.add('warning');
+            } else {
+                countElement.classList.remove('warning');
+            }
+            
+            if(count >= max) {
+                countElement.classList.add('danger');
+            } else {
+                countElement.classList.remove('danger');
+            }
+        }
+        
+        // Image preview
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            if(input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.classList.add('show');
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        function removeImage() {
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').classList.remove('show');
+        }
+        
+        // Tags handling
+        function handleTagInput(event) {
+            if(event.key === 'Enter' || event.key === ',') {
+                event.preventDefault();
+                const input = document.getElementById('tagInput');
+                const tag = input.value.trim();
+                
+                if(tag && !currentTags.includes(tag)) {
+                    addTag(tag);
+                    input.value = '';
+                }
+            }
+        }
+        
+        function addTag(tag) {
+            currentTags.push(tag);
+            updateTagsDisplay();
+            updateTagsHidden();
+        }
+        
+        function removeTag(element) {
+            const tagText = element.parentElement.textContent.slice(0, -1); // Remove the ×
+            currentTags = currentTags.filter(t => t !== tagText);
+            element.parentElement.remove();
+            updateTagsHidden();
+        }
+        
+        function updateTagsDisplay() {
+            const container = document.getElementById('tagsContainer');
+            const input = document.getElementById('tagInput');
+            
+            // Clear all tags except the input
+            container.innerHTML = '';
+            
+            // Add all current tags
+            currentTags.forEach(tag => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag';
+                tagElement.innerHTML = `${tag}<span class="tag-remove" onclick="removeTag(this)">×</span>`;
+                container.appendChild(tagElement);
+            });
+            
+            // Add the input back
+            container.appendChild(input);
+        }
+        
+        function updateTagsHidden() {
+            document.getElementById('tagsHidden').value = currentTags.join(',');
+        }
+        
+        // Save draft
+        function saveDraft() {
+            const formData = {
+                type: document.getElementById('postType').value,
+                title: document.getElementById('postTitle').value,
+                content: document.getElementById('postContent').value,
+                tags: currentTags,
+                company: document.getElementById('companyName')?.value || '',
+                location: document.getElementById('jobLocation')?.value || '',
+                jobType: document.getElementById('jobType')?.value || '',
+                experience: document.getElementById('experience')?.value || '',
+                applyLink: document.getElementById('applyLink')?.value || '',
+                eventDate: document.getElementById('eventDate')?.value || '',
+                eventTime: document.getElementById('eventTime')?.value || '',
+                venue: document.getElementById('venue')?.value || '',
+                regLink: document.getElementById('regLink')?.value || '',
+                visibility: document.querySelector('input[name="visibility"]:checked')?.value || 'public'
+            };
+            
+            localStorage.setItem('postDraft', JSON.stringify(formData));
+            
+            const draftSaved = document.getElementById('draftSaved');
+            draftSaved.classList.add('show');
+            setTimeout(() => draftSaved.classList.remove('show'), 3000);
+        }
+        
+        // Load draft
+        function loadDraft() {
+            const draft = localStorage.getItem('postDraft');
+            if(draft) {
+                const formData = JSON.parse(draft);
+                
+                // Set post type
+                selectPostType(formData.type);
+                
+                // Set basic fields
+                document.getElementById('postTitle').value = formData.title || '';
+                document.getElementById('postContent').value = formData.content || '';
+                
+                // Set tags
+                if(formData.tags) {
+                    currentTags = formData.tags;
+                    updateTagsDisplay();
+                }
+                
+                // Set job fields
+                if(document.getElementById('companyName')) {
+                    document.getElementById('companyName').value = formData.company || '';
+                    document.getElementById('jobLocation').value = formData.location || '';
+                    document.getElementById('jobType').value = formData.jobType || 'fulltime';
+                    document.getElementById('experience').value = formData.experience || '';
+                    document.getElementById('applyLink').value = formData.applyLink || '';
+                }
+                
+                // Set event fields
+                if(document.getElementById('eventDate')) {
+                    document.getElementById('eventDate').value = formData.eventDate || '';
+                    document.getElementById('eventTime').value = formData.eventTime || '';
+                    document.getElementById('venue').value = formData.venue || '';
+                    document.getElementById('regLink').value = formData.regLink || '';
+                }
+                
+                // Set visibility
+                const visibilityRadios = document.querySelectorAll('input[name="visibility"]');
+                visibilityRadios.forEach(radio => {
+                    if(radio.value === formData.visibility) {
+                        radio.checked = true;
+                    }
+                });
+                
+                // Update character counts
+                updateCharCount('title', 100);
+                updateCharCount('content', 2000);
+            }
+        }
+        
+        // Preview post
+        function previewPost() {
+            // Get form values
+            const title = document.getElementById('postTitle').value || 'Untitled Post';
+            const content = document.getElementById('postContent').value || 'No content';
+            const type = document.getElementById('postType').value;
+            
+            // Set preview values
+            document.getElementById('previewTitle').textContent = title;
+            document.getElementById('previewContent').textContent = content;
+            
+            // Set preview time
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('previewTime').textContent = `Just now (${timeString})`;
+            
+            // Handle tags
+            const tagsContainer = document.getElementById('previewTags');
+            tagsContainer.innerHTML = '';
+            if(currentTags.length > 0) {
+                currentTags.forEach(tag => {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.className = 'preview-tag';
+                    tagSpan.textContent = tag;
+                    tagsContainer.appendChild(tagSpan);
+                });
+            } else {
+                const defaultTag = document.createElement('span');
+                defaultTag.className = 'preview-tag';
+                defaultTag.textContent = 'general';
+                tagsContainer.appendChild(defaultTag);
+            }
+            
+            // Handle image preview
+            const imageInput = document.getElementById('imageInput');
+            const previewImageContainer = document.getElementById('previewImageContainer');
+            
+            if(imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImage').src = e.target.result;
+                    previewImageContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                previewImageContainer.style.display = 'none';
+            }
+            
+            // Show/hide job details
+            const jobDetails = document.getElementById('previewJobDetails');
+            const eventDetails = document.getElementById('previewEventDetails');
+            
+            if(type === 'job') {
+                jobDetails.style.display = 'block';
+                eventDetails.style.display = 'none';
+                
+                document.getElementById('previewCompany').textContent = document.getElementById('companyName').value || 'Not specified';
+                document.getElementById('previewJobLocation').textContent = document.getElementById('jobLocation').value || 'Not specified';
+                
+                const jobTypeSelect = document.getElementById('jobType');
+                const jobTypeText = jobTypeSelect.options[jobTypeSelect.selectedIndex]?.text || 'Not specified';
+                document.getElementById('previewJobType').textContent = jobTypeText;
+                
+                document.getElementById('previewExperience').textContent = document.getElementById('experience').value || 'Not specified';
+            } 
+            else if(type === 'event') {
+                jobDetails.style.display = 'none';
+                eventDetails.style.display = 'block';
+                
+                const eventDate = document.getElementById('eventDate').value;
+                if(eventDate) {
+                    const date = new Date(eventDate);
+                    document.getElementById('previewEventDate').textContent = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                } else {
+                    document.getElementById('previewEventDate').textContent = 'Not specified';
+                }
+                
+                document.getElementById('previewEventTime').textContent = document.getElementById('eventTime').value || 'Not specified';
+                document.getElementById('previewVenue').textContent = document.getElementById('venue').value || 'Not specified';
+            } else {
+                jobDetails.style.display = 'none';
+                eventDetails.style.display = 'none';
+            }
+            
+            // Show modal
+            document.getElementById('previewModal').classList.add('active');
+        }
+        
+        function closePreview() {
+            document.getElementById('previewModal').classList.remove('active');
+        }
+        
+        // Auto-save draft every 30 seconds
+        function startAutoSave() {
+            autoSaveTimer = setInterval(() => {
+                const title = document.getElementById('postTitle').value;
+                if(title) { // Only save if there's some content
+                    saveDraft();
+                }
+            }, 30000);
+        }
+        
+        // Clear draft option
+        function clearDraft() {
+            if(confirm('Clear saved draft?')) {
+                localStorage.removeItem('postDraft');
+                document.getElementById('postForm').reset();
+                currentTags = [];
+                updateTagsDisplay();
+                selectPostType('job');
+            }
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date for event date picker
+            const today = new Date().toISOString().split('T')[0];
+            const eventDate = document.getElementById('eventDate');
+            if(eventDate) {
+                eventDate.min = today;
+            }
+            
+            // Load draft if exists
+            loadDraft();
+            
+            // Start auto-save
+            startAutoSave();
+            
+            // Add clear draft option to URL if needed
+            if(window.location.hash === '#clear') {
+                clearDraft();
+            }
+        });
+        
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+            if(autoSaveTimer) {
+                clearInterval(autoSaveTimer);
+            }
+        });
+        
+        // Handle keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // Ctrl/Cmd + S to save draft
+            if((event.ctrlKey || event.metaKey) && event.key === 's') {
+                event.preventDefault();
+                saveDraft();
+            }
+            
+            // Ctrl/Cmd + Enter to submit
+            if((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('postForm').submit();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Help & Queries - Campus Connect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .help-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .query-form {
+            margin-bottom: 40px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .previous-queries {
+            margin-top: 40px;
+        }
+        
+        .query-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .query-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-answered {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .query-message {
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .query-answer {
+            background: #e8f0fe;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .query-answer strong {
+            color: #667eea;
+        }
+        
+        .query-date {
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Campus Connect</div>
+        <div class="nav-links">
+            <a href="/home">Home</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="help-card">
+            <h2>Help & Queries</h2>
+            
+            <div class="query-form">
+                <h3 style="margin-bottom: 15px;">Submit a Query</h3>
+                <form action="/help/submit" method="POST">
+                    <textarea name="message" rows="5" placeholder="Type your question or feedback here..." required></textarea>
+                    <button type="submit">Submit Query</button>
+                </form>
+            </div>
+            
+            <div class="previous-queries">
+                <h3 style="margin-bottom: 20px;">Your Previous Queries</h3>
+                
+                <% if (queries && queries.length > 0) { %>
+                    <% queries.forEach(query => { %>
+                        <div class="query-item">
+                            <span class="query-status <%= query.status === 'pending' ? 'status-pending' : 'status-answered' %>">
+                                <%= query.status === 'pending' ? 'Pending' : 'Answered' %>
+                            </span>
+                            <div class="query-message">
+                                <%= query.message %>
+                            </div>
+                            <% if (query.status === 'answered') { %>
+                                <div class="query-answer">
+                                    <strong>Faculty Response:</strong> <%= query.answer %>
+                                </div>
+                            <% } %>
+                            <div class="query-date">Submitted on: <%= new Date(query.createdAt).toLocaleDateString() %></div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class="empty-state">
+                        <p>You haven't submitted any queries yet.</p>
+                    </div>
+                <% } %>
+            </div>
+            
+            <a href="/home" class="back-link">← Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
